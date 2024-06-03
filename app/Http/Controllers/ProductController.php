@@ -68,9 +68,27 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ProductRequest $request, string $id)
     {
-        //
+        $data = $request->validated();
+        DB::beginTransaction();
+        try {
+            $product = Product::findOrFail($id);
+            if ($request->hasFile('image')) {
+                // Delete old image if exists
+                if ($product->image) {
+                    unlink(storage_path('app/public/' . $product->image));
+                }
+                // Store new image
+                $data['image'] = $request->file('image')->store('images/products', 'public');
+            }
+            $product->update($data);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Product update failed.');
+        }
+        return redirect()->route('products.index')->with('success', 'Product updated successfully.');
     }
 
     /**
