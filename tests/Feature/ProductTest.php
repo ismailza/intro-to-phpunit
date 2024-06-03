@@ -13,15 +13,27 @@ class ProductTest extends TestCase
 {
     use RefreshDatabase;
 
+    private User $user;
+
+    /**
+     * Set up the test.
+     * @return void
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = User::factory()->create();
+    }
+
     /**
      * Test if the products page is displayed.
      * @return void
      */
     public function test_products_page_is_displayed(): void
     {
-        $user = User::factory()->create();
         $response = $this
-            ->actingAs($user)
+            ->actingAs($this->user)
             ->get('/products');
 
         $response->assertOk();
@@ -33,9 +45,8 @@ class ProductTest extends TestCase
      */
     public function test_products_page_with_no_products(): void
     {
-        $user = User::factory()->create();
         $response = $this
-            ->actingAs($user)
+            ->actingAs($this->user)
             ->get('/products');
 
         $response->assertSee(__('No products found!'));
@@ -47,10 +58,9 @@ class ProductTest extends TestCase
      */
     public function test_products_page_with_products(): void
     {
-        $user = User::factory()->create();
         $product = Product::factory()->create();
         $response = $this
-            ->actingAs($user)
+            ->actingAs($this->user)
             ->get('/products');
 
         $response->assertViewHas('products', function ($collection) use ($product) {
@@ -65,10 +75,9 @@ class ProductTest extends TestCase
      */
     public function test_product_page_is_displayed(): void
     {
-        $user = User::factory()->create();
         $product = Product::factory()->create();
         $response = $this
-            ->actingAs($user)
+            ->actingAs($this->user)
             ->get('/products/' . $product->id);
 
         $response->assertOk();
@@ -81,9 +90,8 @@ class ProductTest extends TestCase
      */
     public function test_product_creation_page_is_displayed(): void
     {
-        $user = User::factory()->create();
         $response = $this
-            ->actingAs($user)
+            ->actingAs($this->user)
             ->get('/products/create');
 
         $response->assertOk();
@@ -96,9 +104,8 @@ class ProductTest extends TestCase
      */
     public function test_product_can_be_created(): void
     {
-        $user = User::factory()->create();
         $response = $this
-            ->actingAs($user)
+            ->actingAs($this->user)
             ->post('/products', [
                 'name' => 'Test Product',
                 'description' => 'Test Product Description',
@@ -124,10 +131,9 @@ class ProductTest extends TestCase
      */
     public function test_product_edit_page_is_displayed(): void
     {
-        $user = User::factory()->create();
         $product = Product::factory()->create();
         $response = $this
-            ->actingAs($user)
+            ->actingAs($this->user)
             ->get('/products/' . $product->id . '/edit');
 
         $response->assertOk();
@@ -141,10 +147,9 @@ class ProductTest extends TestCase
      */
     public function test_product_can_be_updated(): void
     {
-        $user = User::factory()->create();
         $product = Product::factory()->create();
         $response = $this
-            ->actingAs($user)
+            ->actingAs($this->user)
             ->patch('/products/' . $product->id, [
                 'name' => 'Test Update Product',
                 'description' => 'Test Update Product Description',
@@ -171,10 +176,9 @@ class ProductTest extends TestCase
      */
     public function test_product_can_be_deleted(): void
     {
-        $user = User::factory()->create();
         $product = Product::factory()->create();
         $response = $this
-            ->actingAs($user)
+            ->actingAs($this->user)
             ->delete('/products/' . $product->id);
 
         $response
