@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use JsonException;
 use Tests\TestCase;
 
 class ProductTest extends TestCase
@@ -82,5 +83,34 @@ class ProductTest extends TestCase
             ->get('/products/create');
 
         $response->assertOk();
+    }
+
+    /**
+     * Test if the product can be created.
+     * @return void
+     * @throws JsonException
+     */
+    public function test_product_can_be_created(): void
+    {
+        $user = User::factory()->create();
+        $response = $this
+            ->actingAs($user)
+            ->post('/products', [
+                'name' => 'Test Product',
+                'description' => 'Test Product Description',
+                'price' => 100,
+                'stock' => 10,
+            ]);
+
+        $response
+            ->assertSessionHasNoErrors()
+            ->assertRedirect('/products');
+
+        $this->assertDatabaseHas('products', [
+            'name' => 'Test Product',
+            'description' => 'Test Product Description',
+            'price' => 100,
+            'stock' => 10,
+        ]);
     }
 }
