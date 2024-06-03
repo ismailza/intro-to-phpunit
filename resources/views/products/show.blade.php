@@ -20,7 +20,7 @@
                     @endif
                     <div class="mb-4">
                         <span class="text-lg font-semibold text-gray-500 dark:text-gray-400">Price:</span>
-                        <span class="text-lg font-semibold">{{ $product->price }}</span>
+                        <span class="text-lg font-semibold">{{ $product->price }} MAD | {{ $product->priceUSD }} USD</span>
                     </div>
                     <div class="mb-4">
                         <span class="text-lg font-semibold text-gray-500 dark:text-gray-400">Stock:</span>
