@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Exceptions\CurrencyNotFoundException;
 use App\Services\CurrencyService;
-use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -39,7 +39,7 @@ class Product extends Model
     {
         try {
             return (new CurrencyService())->convert($this->price, 'MAD', $currency);
-        } catch (Exception $e) {
+        } catch (CurrencyNotFoundException $e) {
             return null;
         }
     }
