@@ -113,4 +113,34 @@ class ProductTest extends TestCase
             'stock' => 10,
         ]);
     }
+
+    /**
+     * Test if the product can be updated.
+     * @return void
+     * @throws JsonException
+     */
+    public function test_product_can_be_updated(): void
+    {
+        $user = User::factory()->create();
+        $product = Product::factory()->create();
+        $response = $this
+            ->actingAs($user)
+            ->patch('/products/' . $product->id, [
+                'name' => 'Test Update Product',
+                'description' => 'Test Update Product Description',
+                'price' => 100,
+                'stock' => 10,
+            ]);
+
+        $response
+            ->assertSessionHasNoErrors()
+            ->assertRedirect('/products');
+
+        $product->refresh();
+
+        $this->assertSame('Test Update Product', $product->name);
+        $this->assertSame('Test Update Product Description', $product->description);
+        $this->assertSame(100, $product->price);
+        $this->assertSame(10, $product->stock);
+    }
 }
