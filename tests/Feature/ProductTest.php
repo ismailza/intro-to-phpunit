@@ -115,6 +115,21 @@ class ProductTest extends TestCase
     }
 
     /**
+     * Test if the product edit page is displayed.
+     * @return void
+     */
+    public function test_product_edit_page_is_displayed(): void
+    {
+        $user = User::factory()->create();
+        $product = Product::factory()->create();
+        $response = $this
+            ->actingAs($user)
+            ->get('/products/' . $product->id . '/edit');
+
+        $response->assertOk();
+    }
+
+    /**
      * Test if the product can be updated.
      * @return void
      * @throws JsonException
