@@ -40,4 +40,18 @@ class ProductTest extends TestCase
         $response->assertSee(__('No products found!'));
     }
 
+    /**
+     * Test the products page with products.
+     * @return void
+     */
+    public function test_products_page_with_products(): void
+    {
+        $user = User::factory()->create();
+        Product::factory()->create();
+        $response = $this
+            ->actingAs($user)
+            ->get('/products');
+
+        $response->assertDontSee(__('No products found!'));
+    }
 }
