@@ -158,4 +158,26 @@ class ProductTest extends TestCase
         $this->assertSame(100, $product->price);
         $this->assertSame(10, $product->stock);
     }
+
+    /**
+     * Test if the product can be deleted.
+     * @return void
+     * @throws JsonException
+     */
+    public function test_product_can_be_deleted(): void
+    {
+        $user = User::factory()->create();
+        $product = Product::factory()->create();
+        $response = $this
+            ->actingAs($user)
+            ->delete('/products/' . $product->id);
+
+        $response
+            ->assertSessionHasNoErrors()
+            ->assertRedirect('/products');
+
+        $this->assertDatabaseMissing('products', [
+            'id' => $product->id,
+        ]);
+    }
 }
