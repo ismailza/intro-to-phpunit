@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -31,8 +32,18 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {
-        Product::create($request->validated());
-
+        $data = $request->validated();
+        DB::beginTransaction();
+        try {
+            if ($request->hasFile('image')) {
+                $data['image'] = $request->file('image')->store('images/products', 'public');
+            }
+            Product::create($data);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Product creation failed.');
+        }
         return redirect()->route('products.index')->with('success', 'Product created successfully.');
     }
 
