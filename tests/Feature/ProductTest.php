@@ -54,4 +54,19 @@ class ProductTest extends TestCase
 
         $response->assertDontSee(__('No products found!'));
     }
+
+    /**
+     * Test if the product page is displayed.
+     * @return void
+     */
+    public function test_product_page_is_displayed(): void
+    {
+        $user = User::factory()->create();
+        $product = Product::factory()->create();
+        $response = $this
+            ->actingAs($user)
+            ->get('/products/' . $product->id);
+
+        $response->assertOk();
+    }
 }
