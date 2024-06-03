@@ -69,4 +69,18 @@ class ProductTest extends TestCase
 
         $response->assertOk();
     }
+
+    /**
+     * Test if the product creation page is displayed.
+     * @return void
+     */
+    public function test_product_creation_page_is_displayed(): void
+    {
+        $user = User::factory()->create();
+        $response = $this
+            ->actingAs($user)
+            ->get('/products/create');
+
+        $response->assertOk();
+    }
 }
