@@ -48,11 +48,14 @@ class ProductTest extends TestCase
     public function test_products_page_with_products(): void
     {
         $user = User::factory()->create();
-        Product::factory()->create();
+        $product = Product::factory()->create();
         $response = $this
             ->actingAs($user)
             ->get('/products');
 
+        $response->assertViewHas('products', function ($collection) use ($product) {
+            return $collection->contains($product);
+        });
         $response->assertDontSee(__('No products found!'));
     }
 
@@ -69,6 +72,7 @@ class ProductTest extends TestCase
             ->get('/products/' . $product->id);
 
         $response->assertOk();
+        $response->assertViewHas('product', $product);
     }
 
     /**
@@ -127,6 +131,7 @@ class ProductTest extends TestCase
             ->get('/products/' . $product->id . '/edit');
 
         $response->assertOk();
+        $response->assertViewHas('product', $product);
     }
 
     /**
