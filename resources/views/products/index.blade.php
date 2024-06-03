@@ -19,8 +19,9 @@
                             <tr class="bg-gray-100 dark:bg-gray-700">
                                 <th class="px-4 py-2 border border-gray-200 dark:border-gray-700">ID</th>
                                 <th class="px-4 py-2 border border-gray-200 dark:border-gray-700">Name</th>
-                                <th class="px-4 py-2 border border-gray-200 dark:border-gray-700">Price</th>
                                 <th class="px-4 py-2 border border-gray-200 dark:border-gray-700">Stock</th>
+                                <th class="px-4 py-2 border border-gray-200 dark:border-gray-700">Price (MAD)</th>
+                                <th class="px-4 py-2 border border-gray-200 dark:border-gray-700">Price (USD)</th>
                                 <th class="px-4 py-2 border border-gray-200 dark:border-gray-700">Created At</th>
                                 <th class="px-4 py-2 border border-gray-200 dark:border-gray-700 text-right">Actions</th>
                             </tr>
@@ -30,8 +31,9 @@
                             <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
                                 <td class="px-4 py-1 border border-gray-200 dark:border-gray-700">{{ $product->id }}</td>
                                 <td class="px-4 py-1 border border-gray-200 dark:border-gray-700">{{ $product->name }}</td>
-                                <td class="px-4 py-1 border border-gray-200 dark:border-gray-700">{{ $product->price }}</td>
                                 <td class="px-4 py-1 border border-gray-200 dark:border-gray-700">{{ $product->stock }}</td>
+                                <td class="px-4 py-1 border border-gray-200 dark:border-gray-700">{{ $product->price }}</td>
+                                <td class="px-4 py-1 border border-gray-200 dark:border-gray-700">{{ $product->priceUSD }}</td>
                                 <td class="px-4 py-1 border border-gray-200 dark:border-gray-700">{{ $product->created_at }}</td>
                                 <td class="px-4 py-1 border border-gray-200 dark:border-gray-700 flex justify-end">
                                     <a href="{{ route('products.show', $product->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded me-2">View</a>
@@ -45,7 +47,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td class="px-4 py-2 border border-gray-200 dark:border-gray-700 text-center" colspan="5">{{ __('No products found!') }}</td>
+                                <td class="px-4 py-2 border border-gray-200 dark:border-gray-700 text-center" colspan="7">{{ __('No products found!') }}</td>
                             </tr>
                         @endforelse
                         </tbody>
